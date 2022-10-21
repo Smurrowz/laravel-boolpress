@@ -7,6 +7,13 @@
     <label for="title" class="form-label">Titolo</label>
     <input type="text" name="title" class="form-control" id="title" value="{{old('title')}}" placeholder="Inserisci il titolo">
   </div>
+  <select name="category_id" class="form-control col-3">
+    <option selected>Seleziona Categoria</option>
+    <option value="">--nessuna--</option>
+    @foreach ($categories as $category)
+    <option @if(old('category_id') === $category->id) selected @endif value="{{$category->id}}">{{$category->name}}</option>  
+    @endforeach
+  </select>
   <div class="mb-3">
     <label for="content" class="form-label">Contenuto:</label>
     <textarea class="form-control" id="content"  placeholder="Inserisci il contenuto del post" name="content" rows="20">{{old('content')}}</textarea>
