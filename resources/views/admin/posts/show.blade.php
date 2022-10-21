@@ -6,6 +6,7 @@
   <div class="d-flex justify-content-around m-4" >
     <p>Creato il: {{$post['created_at']}} </p>
     <p>Modificato il: {{$post['updated_at']}}</p>
+    <p>Categoria: {{$post->category ? $post->category->name : 'nessuna categoria'}}</p>
   </div>
   <p>
     {{$post['content']}}
@@ -17,6 +18,19 @@
       @method('DELETE')
       <input type="submit" value="! CANCELLA !" class="btn btn-danger">
     </form>
+  </div>
+</div>
+<div class="container mt-4 ">
+  <div class="row">
+    <div class="col-12">
+      @if($post->category)
+      @foreach ($post->category->posts as $relatedPost)
+      <p>Post numero  :{{$relatedPost->id}} - {{$relatedPost->title}}</p>
+          
+      @endforeach
+
+      @endif
+    </div>
   </div>
 </div>
 @endsection
