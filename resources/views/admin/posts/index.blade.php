@@ -14,6 +14,7 @@
                   <th scope="col">Titolo</th>
                   <th scope="col">Slug</th>
                   <th scope="col">Categoria </th>
+                  <th scope="col">Tag </th>
                   <th scope="col">Creato il</th>
 
                 </tr>
@@ -24,7 +25,15 @@
                   <th scope="row">{{$post['id']}}</th>
                   <td>{{$post['title']}}</td>
                   <td>{{$post['slug']}}</td>
-                  <td>{{$post->category ? $post->category->name : 'nessuna categoria' }}</td>
+                  <td>{{$post->category ? $post->category->name : '--' }}</td>
+                  <td>
+                    @foreach ($post->tags as $tag)
+                     {{$tag->name}} 
+                     @if(!$loop->last)
+                      -
+                     @endif
+                    @endforeach 
+                  </td>
                   <td>{{$post['created_at']}}</td>
                   <td><th scope="col"><a class="btn btn-primary" href="{{route('admin.posts.show', $post)}}" role="button">Vedi</a></th> 
                   <td><th scope="col"><a class="btn btn-success" href="{{route('admin.posts.edit', $post)}}" role="button">Modifica</a></th>                   

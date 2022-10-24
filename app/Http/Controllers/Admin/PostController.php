@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Post;
+use App\Tag;
 use App\Category;
 use Illuminate\Http\Request;
 
@@ -31,7 +32,9 @@ class PostController extends Controller
     
     {
         $categories = Category::orderBy('name','asc')->get();
-        return view('admin.posts.create', compact('categories'));
+        $tags = Tag::orderBy('name','asc')->get();
+        
+        return view('admin.posts.create', compact('categories','tags'));
     }
 
     /**
@@ -47,9 +50,15 @@ class PostController extends Controller
             'title' => 'required|max:255|min:3',
             'content' => 'required',
             'category_id' => 'nullable|exists:categories,id',
+            'tags' => 'nullable|exists:tags,id'
         ]);
         $params['slug'] = str_replace(' ','-',$params['title']);
         $post = Post::create($params);
+
+        if(array_key_exists('tags',$params)){
+            $tags = $params['tags'];
+            $post->tags()->sync($tags);
+        }
         return redirect()->route('admin.posts.show',$post);
     }
 
@@ -73,7 +82,8 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::orderBy('name', 'asc')->get();
-        return view('admin.posts.edit', compact('post','categories'));
+        $tags = Tag::orderBy('name','asc')->get();
+        return view('admin.posts.edit', compact('post','categories','tags'));
     }
 
     /**
@@ -89,9 +99,16 @@ class PostController extends Controller
             'title' => 'required|max:255|min:3',
             'content' => 'required',
             'category_id' => 'nullable|exists:categories,id',
+            'tags' => 'nullable|exists:tags,id'
         ]);
         $params['slug'] = str_replace(' ','-',$params['title']);
         $post->update($params);
+        if(array_key_exists('tags',$params)){
+            $tags = $params['tags'];
+            $post->tags()->sync($tags);
+        }else{
+            $post->tags()->detach();
+        }
         return redirect()->route('admin.posts.show',$post);
     }
 
