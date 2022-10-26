@@ -12,6 +12,7 @@ class Post extends Model
         'content',
         'slug',
         'category_id',
+        'cover'
     ];
 
     public function category(){
@@ -20,5 +21,9 @@ class Post extends Model
 
     public function tags(){
         return $this->belongsToMany('App\Tag');
+    }
+    public function getCoverAttribute($value){
+        
+        return asset('storage/'.$value);
     }
 }

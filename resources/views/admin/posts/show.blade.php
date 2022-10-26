@@ -1,6 +1,12 @@
 @extends('layouts.app')
+{{-- @dd($post->cover); --}}
 @section('content')
     <div class="container ">
+        @if($post->cover) 
+            <div class="col-12">
+                <img src="{{asset($post->cover)}}" width="400" alt="">
+            </div>
+        @endif
         <h1 class="text-primary text-center">{{ $post['title'] }}</h1>
         <h4 class="text-secondary text-center">{{ $post['slug'] }}</h4>
         <div class="d-flex justify-content-around m-4">

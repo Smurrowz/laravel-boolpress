@@ -20,7 +20,7 @@ class PostSeeder extends Seeder
         $tags = Tag::all()->pluck('id');
 
 
-        for($i=0;$i< 50; $i++) 
+        for($i=0;$i< 20; $i++) 
         {
             $post = new Post();
             $post->title = $faker->words( rand(5,10), true);

@@ -1,13 +1,17 @@
 @extends('layouts.app')
 @section('content')
     <h1 class="text-center"> Modifica il post</h1>
-    <form action="{{ route('admin.posts.update', $post) }}" method="POST">
+    <form action="{{ route('admin.posts.update', $post) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">
             <label for="title" class="form-label">Titolo</label>
             <input type="text" name="title" class="form-control" id="title" value="{{ $post['title'] }}"
                 placeholder="Inserisci il titolo">
+        </div>
+        <div class="form-group">
+            <label for="image">Upload</label>
+            <input type="file" name="image" class="form-control-file" id="image">
         </div>
         <select name="category_id" class="form-control col-3">
             {{-- <option selected>{{$post->category ? $post->category->name : 'nessuna'}}</option> --}}

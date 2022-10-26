@@ -7,6 +7,7 @@ use App\Post;
 use App\Tag;
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 
 class PostController extends Controller
@@ -50,9 +51,15 @@ class PostController extends Controller
             'title' => 'required|max:255|min:3',
             'content' => 'required',
             'category_id' => 'nullable|exists:categories,id',
-            'tags' => 'nullable|exists:tags,id'
+            'tags' => 'nullable|exists:tags,id',
+            'image' => 'nullable|mimes:jpeg,jpg,png,bmp,gif,svg|max:2048',
         ]);
         $params['slug'] = str_replace(' ','-',$params['title']);
+        
+        if(array_key_exists('image',$params)){
+            $img_path = Storage::disk('public')->put('cover',$params['image']);
+            $params['cover'] = $img_path;
+        }
         $post = Post::create($params);
 
         if(array_key_exists('tags',$params)){
@@ -99,9 +106,18 @@ class PostController extends Controller
             'title' => 'required|max:255|min:3',
             'content' => 'required',
             'category_id' => 'nullable|exists:categories,id',
-            'tags' => 'nullable|exists:tags,id'
+            'tags' => 'nullable|exists:tags,id',
+            'image' => 'nullable|mimes:jpeg,jpg,png,bmp,gif,svg|max:2048',
         ]);
         $params['slug'] = str_replace(' ','-',$params['title']);
+        $params = $request->all();
+        if (array_key_exists('image', $params)) {
+            if ($post->cover) {
+                Storage::delete($post->cover);
+            }
+            $img_path = Storage::put('cover', $params['image']);
+            $params['cover'] = $img_path;
+        }
         $post->update($params);
         if(array_key_exists('tags',$params)){
             $tags = $params['tags'];
@@ -120,7 +136,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $cover = $post->cover;
         $post->delete();
+        if($cover && Storage::exists($cover)){
+
+            Storage::delete($cover);
+        }
         return redirect()->route('admin.posts.index');
     }
 }
