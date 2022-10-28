@@ -4,7 +4,7 @@
     <div class="container ">
         @if($post->cover) 
             <div class="col-12">
-                <img src="{{asset($post->cover)}}" width="400" alt="">
+                <img src="{{asset('Storage/'.$post->cover)}}" width="400" alt="">
             </div>
         @endif
         <h1 class="text-primary text-center">{{ $post['title'] }}</h1>
