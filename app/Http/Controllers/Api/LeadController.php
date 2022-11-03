@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Post;
+use Illuminate\Support\Facades\Validator;
+use App\Lead;
 
-class PostController extends Controller
+class LeadController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('created_at', 'desc')->with('category', 'tags')->limit(20)->get();
-        return response()->json([
-            'posts' => $posts,
-        ]);
+        
     }
 
     /**
@@ -29,7 +27,28 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $validator = Validator::make($data,[
+            'name' => 'required|max:255',
+            'email' => 'required|max:255!email',
+            'message' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+
+            ],400);
+        }
+        $lead = Lead::create($data);
+        // invio mail ad admin
+        // invio mail ad utente
+        return response()->json([
+            'success' => true ,
+            'lead' => $lead
+        ]);
     }
 
     /**
@@ -38,22 +57,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($slug)
+    public function show($id)
     {
-        $post = Post::where('slug',$slug)->with('category', 'tags')->first();
-
-        if($post){
-            return response()->json([
-                'post' => $post,
-                'success' => true 
-            ]);
-
-        }else{
-            return response()->json([
-                'success' => false,
-
-            ],404);
-        }
+        //
     }
 
     /**

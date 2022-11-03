@@ -1,15 +1,23 @@
 <template>
   <div>
-    <section>
-      <h1>contantti</h1>
+    <section class="text-center">
+      <h1>contatti</h1>
+      <p>
+        COMPILA IL FORM PER CONTATTARCI
+      </p>
     </section>
     <section>
-      form di contatti
+      <LeadForm class="text-center"></LeadForm>
+      
     </section>
   </div>
 </template>
 <script>
+import LeadForm from '../components/LeadForm.vue';
 export default {
+  components: {
+    LeadForm,
+  }
 
 }
 </script>

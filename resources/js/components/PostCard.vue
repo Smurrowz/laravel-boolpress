@@ -5,12 +5,16 @@
     <p>{{ post.date }}</p>
     <img v-if="post.cover" width="200px" :src="pathImg+post.cover">
     <p v-if="post.category">{{ post.category.name }}  </p> -->
-    <p v-if="post.tags"><span v-for="(tag, index) in post.tags" :key="index">{{ tag.name }}  </span></p>
+    <p v-if="post.tags"><Tags :tags="post.tags"></Tags></p>
   </div>
 </template>
 <script>
+import Tags from '../components/Tags.vue'
 
 export default {
+  components: {
+    Tags,
+  },
   name: 'PostCard',
   data() {
     return {
